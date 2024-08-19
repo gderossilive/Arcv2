@@ -1,0 +1,34 @@
+# import environment variables from .env file
+get-content .env | foreach {
+    $name, $value = $_.split('=')
+    set-content ENV:\$name $value
+}
+
+az login --scope https://management.core.windows.net//.default --tenant $ENV:MyTenantId
+az account set --subscription $ENV:MySubscriptionId # MCAPS tenant
+
+# Seed is a random string used to create unique names for the resources
+$Seed=(-join ((48..57) + (97..122) | Get-Random -Count 5 | % {[char]$_}))
+
+# password for the administrator account
+$adminPassword=(-join ((48..59) + (63..91) + (99..123) | Get-Random -count 15 | % {[char]$_})) 
+
+# Create the resource group
+az group create --name "$Seed-Demo" --location "$ENV:location"
+
+# Create the SSH key for the AKS Cluster
+#$SSHPublickey=az sshkey create --name "SSHKey-$Seed" --resource-group "$Seed-Demo" --query "publicKey" -o json
+
+# Create the hub&spoke infrastructure
+az deployment sub create `
+     --name "CoreDeploy-$Seed" `
+     --location "$ENV:location" `
+     --template-file './Main.bicep' `
+     --parameters `
+          'https://raw.githubusercontent.com/gderossilive/AIOps/main/Parameters.json' `
+          location="$ENV:location" `
+          Seed=$Seed `
+          MyObjectId="$ENV:MyObecjectId" `
+          adminPassword=$adminPassword `
+          SSHPublickey=$SSHPublickey `
+          WinNum=1 
