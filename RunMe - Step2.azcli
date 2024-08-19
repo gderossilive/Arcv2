@@ -15,7 +15,7 @@ az role assignment create --assignee $ArcSp_id --role "Kubernetes Cluster - Azur
 #   1 - Open an RDP session on the VM 
 #   2 - Run the output of the following command in a elevated powershell
      Write-Host "Invoke-WebRequest -Uri https://raw.githubusercontent.com/gderossilive/Arcv2/main/Files/ArcForServer.ps1 ``
-          -OutFile 'c:\windows\temp\step1.ps1';cd \windows\temp;powershell ``
+          -OutFile 'c:\windows\temp\step1.ps1'; ``
           -File 'c:\windows\temp\step1.ps1' `` 
           -SubscriptionId $subscriptionID  ``
           -TenantId $tenantID  ``

@@ -36,12 +36,13 @@ if ($Proxy) {
 
 # Install the package
 Write-Verbose -Message "Installing Arc agent" -Verbose
-(Start-Process -FilePath msiexec.exe -ArgumentList @("/i", "AzureConnectedMachineAgent.msi" , "/l*v", "installationlog.txt", "/qn") -Wait -Passthru).ExitCode
+$exitCode=(Start-Process -FilePath msiexec.exe -ArgumentList @("/i", "AzureConnectedMachineAgent.msi" , "/l*v", "installationlog.txt", "/qn") -Wait -Passthru).ExitCode
 if ($exitCode -ne 0) {
     $message = (net helpmsg $exitCode)        
     throw "Installation failed: $message See installationlog.txt for additional details."
 }
 
+Write-Verbose -Message "Connecting Arc agent to Azure" -Verbose
 if ($AAPLS) {
     $env:PRIVATELINKSCOPE = $AAPLS
     & "$env:ProgramW6432\AzureConnectedMachineAgent\azcmagent.exe" config set proxy.url $Proxy
