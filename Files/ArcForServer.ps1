@@ -4,7 +4,7 @@ param(
     [string] $ResourceGroupName,
     [string] $Location,
     [string] $ServicePrincipalId,
-    [string] $Password,
+    [securestring] $Password,
     [string] $AAPLS,
     [string] $Proxy,
     [bool] $EnableArcAutoupdate,
