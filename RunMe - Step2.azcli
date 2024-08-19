@@ -16,10 +16,12 @@ az role assignment create --assignee $ArcSp_id --role "Kubernetes Cluster - Azur
 #   2 - Run the output of the following command in a elevated powershell
      Write-Host "Invoke-WebRequest -Uri https://raw.githubusercontent.com/gderossilive/Arcv2/main/Files/ArcForServer.ps1 ``
           -OutFile 'c:\windows\temp\step1.ps1'; ``
-          -File 'c:\windows\temp\step1.ps1' `` 
+     powershell -File 'c:\windows\temp\step1.ps1' `` 
           -SubscriptionId $subscriptionID  ``
           -TenantId $tenantID  ``
           -ResourceGroupName $Seed-Demo  ``
           -Location $ENV:location  ``
           -ServicePrincipalId $ArcSp_id  ``
-          -Password $ArcSp_pwd"
+          -Password $ArcSp_pwd" ``
+          -EnableArcAutoupdate $true  ``
+          -EnableSSH $true  ``

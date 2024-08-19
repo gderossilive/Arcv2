@@ -6,7 +6,9 @@ param(
     [string] $ServicePrincipalId,
     [string] $Password,
     [string] $AAPLS,
-    [string] $Proxy
+    [string] $Proxy,
+    [bool] $EnableArcAutoupdate,
+    [bool] $EnableSSH
 )
 
 # Enable an Azure VM to be ARC enabled
@@ -70,7 +72,29 @@ if ($AAPLS) {
 }
 
 # Enabling Arc Agent autoupdate
-Write-Verbose -Message "Enabling Arc Agent autoupdate" -Verbose
-$ServiceManager = (New-Object -com "Microsoft.Update.ServiceManager")
-$ServiceID = "7971f918-a847-4430-9279-4a52d1efe18d"
-$ServiceManager.AddService2($ServiceId,7,"")
+if ($EnableArcAutoupdate) {
+    Write-Verbose -Message "Enabling Arc Agent autoupdate" -Verbose
+    $ServiceManager = (New-Object -com "Microsoft.Update.ServiceManager")
+    $ServiceID = "7971f918-a847-4430-9279-4a52d1efe18d"
+    $ServiceManager.AddService2($ServiceId,7,"")
+}
+
+if ($EnableSSH) {
+    # Enabling SSH connectivity via Arc
+    Write-Verbose -Message "\n\nEnabling SSH connectivity via Arc" -Verbose
+    ## Install the OpenSSH Client
+    Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
+    ## Install the OpenSSH Server
+    Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+    ## Start the sshd service
+    Start-Service sshd
+    ## OPTIONAL but recommended:
+    Set-Service -Name sshd -StartupType 'Automatic'
+    ## Confirm the Firewall rule is configured. It should be created automatically by setup. Run the following to verify
+    if (!(Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyContinue | Select-Object Name, Enabled)) {
+        Write-Output "Firewall Rule 'OpenSSH-Server-In-TCP' does not exist, creating it..."
+        New-NetFirewallRule -Name 'OpenSSH-Server-In-TCP' -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+    } else {
+        Write-Output "Firewall rule 'OpenSSH-Server-In-TCP' has been created and exists."
+    }
+}
