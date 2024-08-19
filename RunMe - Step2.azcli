@@ -14,7 +14,7 @@ az role assignment create --assignee $ArcSp_id --role "Kubernetes Cluster - Azur
 # To onboard on Arc this VM: 
 #   1 - Open an RDP session on the VM 
 #   2 - Run the output of the following command in a elevated powershell
-     Write-Host "Invoke-WebRequest -Uri https://raw.githubusercontent.com/gderossilive/Edge/main/Files/Step1-ArcForServer.ps1 ``
+     Write-Host "Invoke-WebRequest -Uri https://raw.githubusercontent.com/gderossilive/Arcv2/main/Files/ArcForServer.ps1 ``
           -OutFile 'c:\windows\temp\step1.ps1';cd \windows\temp;powershell ``
           -File 'c:\windows\temp\step1.ps1' `` 
           -SubscriptionId $subscriptionID  ``
