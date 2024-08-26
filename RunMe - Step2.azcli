@@ -25,3 +25,9 @@ az role assignment create --assignee $ArcSp_id --role "Kubernetes Cluster - Azur
           -Password $ArcSp_pwd  ``
           -EnableArcAutoupdate=1  ``
           -EnableSSH=1"
+
+# Delete Azure Bastion to avoid additional costs. You can now connect via SSH to the Arc-enabled VM
+az network bastion delete --name Bastion-${Seed} --resource-group $Seed-Demo
+
+# Delete Azure Bastion public IP
+az network public-ip delete --name BastionPublicIp-${Seed} --resource-group $Seed-Demo
