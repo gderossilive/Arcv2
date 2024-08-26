@@ -72,14 +72,14 @@ if ($AAPLS) {
 }
 
 # Enabling Arc Agent autoupdate
-if ($EnableArcAutoupdate==1) {
+if ($EnableArcAutoupdate=1) {
     Write-Verbose -Message "Enabling Arc Agent autoupdate" -Verbose
     $ServiceManager = (New-Object -com "Microsoft.Update.ServiceManager")
     $ServiceID = "7971f918-a847-4430-9279-4a52d1efe18d"
     $ServiceManager.AddService2($ServiceId,7,"")
 }
 
-if ($EnableSSH==1) {
+if ($EnableSSH=1) {
     # Enabling SSH connectivity via Arc
     Write-Verbose -Message "\n\nEnabling SSH connectivity via Arc" -Verbose
     ## Install the OpenSSH Client
