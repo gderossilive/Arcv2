@@ -33,7 +33,10 @@ Write-Verbose -Message "Downloading the Arc Agent package" -Verbose
 if ($Proxy) {
     Invoke-WebRequest -proxy $Proxy -Uri https://aka.ms/AzureConnectedMachineAgent -OutFile AzureConnectedMachineAgent.msi
 } else {
-    Invoke-WebRequest -Uri https://aka.ms/AzureConnectedMachineAgent -OutFile AzureConnectedMachineAgent.msi 
+    # download the latest agent version
+    # Invoke-WebRequest -Uri https://aka.ms/AzureConnectedMachineAgent -OutFile AzureConnectedMachineAgent.msi 
+    # download the agent version 1.43 - June 2024
+    Invoke-WebRequest -Uri https://download.microsoft.com/download/0/7/8/078f3bb7-6a42-41f7-b9d3-9a0eb4c94df8/AzureConnectedMachineAgent.msi -OutFile AzureConnectedMachineAgent.msi 
 }
 
 # Install the package
