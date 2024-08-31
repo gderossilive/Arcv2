@@ -32,9 +32,5 @@ az network bastion delete --name Bastion-${Seed} --resource-group $Seed-Demo
 # Delete Azure Bastion public IP
 az network public-ip delete --name BastionPublicIp-${Seed} --resource-group $Seed-Demo
 
-# Delete the association between Azure Bastion subnet with the Network Security Group
-az network vnet subnet update --resource-group $Seed-Demo --vnet-name myVNet --name mySubnet --network-security-group myNSG
-
-
 # Delete Azure Bastion Network Security Group
 az network nsg delete --resource-group "$Seed-Demo" --name "VNet-$Seed-AzureBastionSubnet-nsg-$ENV:location"
